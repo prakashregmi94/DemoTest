@@ -20,8 +20,8 @@ function Login() {
             <form class = 'main-form' action='' onSubmit={handleSubmit}>
             <h2> Sign In </h2>
                 <div>
-                    <label class = 'label' htmlFor='email'>Username</label>
-                    <input class = 'input' name = 'email' type = 'email' placeholder = 'Please Enter your email'
+                    <label class = 'label' htmlFor='text'>Username</label>
+                    <input class = 'input' name = 'name' type = 'text' placeholder = 'Please Enter your username'
                     onChange={handleChange}         
                     />
                 </div>
