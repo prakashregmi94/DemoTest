@@ -37,7 +37,7 @@ function Signup() {
                     onChange={handleChange} />
                 </div>
 
-                <button class = 'button'type = 'submit' >Create Account</button>
+                <button class = 'button' type = 'submit' >Create Account</button>
                 <Link to = '/' >Back to Login </Link>
             </form>    
          </div>

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import './form.css';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate  } from 'react-router-dom'
+import axios  from 'axios'
 
 function Login() {
     const [loginValues, setLoginValues] = useState({
@@ -8,8 +9,21 @@ function Login() {
         password:''
     })
 
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        axios.post('http://localhost:8081/login', loginValues)
+        .then(res => {
+            console.log(res.data)
+            if(res.data === "Success") {
+                navigate('/home')
+            } else {
+                alert('Wrong Credentials ')
+            }
+            
+        })
+        .catch(err => console.log(err))
     }
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,7 +35,7 @@ function Login() {
             <h2> Sign In </h2>
                 <div>
                     <label class = 'label' htmlFor='text'>Username</label>
-                    <input class = 'input' name = 'name' type = 'text' placeholder = 'Please Enter your username'
+                    <input class = 'input' name = 'username' type = 'text' placeholder = 'Please Enter your username'
                     onChange={handleChange}         
                     />
                 </div>
