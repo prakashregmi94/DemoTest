@@ -13,6 +13,19 @@ const db = mysql.createConnection({
     database: 'signup'
 })
 
+db.connect((error) => {
+    if (error) {
+      console.error('Error connecting to MySQL database:', error);
+    } else {
+      console.log('Connected to MySQL database!');   
+      var sql = `CREATE TABLE IF NOT EXISTS login (id INT AUTO_INCREMENT, username VARCHAR (255), password VARCHAR (255))`
+      db.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Table created");
+      });
+    }
+  });
+
 
 app.post('/signup', (req,res) => {
     const sql = "INSERT INTO login (`username`, `password`) VALUES (?)"
@@ -47,5 +60,5 @@ app.post('/login', (req,res) => {
 })
 
 app.listen(8081, ()=>{
-    console.log('listening')
+    console.log('SREVER STARTED')
 } )

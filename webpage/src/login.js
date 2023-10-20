@@ -15,7 +15,6 @@ function Login() {
         e.preventDefault();
         axios.post('http://localhost:8081/login', loginValues)
         .then(res => {
-            console.log(res.data)
             if(res.data === "Success") {
                 navigate('/home')
             } else {
