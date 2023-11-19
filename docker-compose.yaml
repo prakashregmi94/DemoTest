@@ -1,0 +1,31 @@
+version: "3.8"
+services: 
+  database: 
+    build: 
+      context: ./Server/data
+      dockerfile: Dockerfile.sql
+    image: database
+    volumes:
+      - data:/var/lib/postgresql/data
+    env_file:
+      - /env/postgres.env
+    container_name: pgdb
+
+  backend: 
+    build: 
+      context: ./Server
+    image: backend  
+    volumes:
+      - ./Server:/app/src
+    ports:
+      - 8005:8005
+    env_file:
+      - /env/backend.env
+    container_name: backend
+    depends_on:
+      - database
+
+  #frontend
+
+volumes:
+  data:

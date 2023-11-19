@@ -1,39 +1,55 @@
 const express = require('express')
-const mysql = require('mysql')
+const { Client } = require('pg')
 const cors = require('cors')
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-const db = mysql.createConnection({
+// uncomment for local host 
+
+/*const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'signup'
+}) */
+
+
+// const db = mysql.createConnection // require mysql 
+
+const db = new Client({
+    host: 'pgdb',
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB
 })
 
 db.connect((error) => {
     if (error) {
-      console.error('Error connecting to MySQL database:', error);
+      console.error('Error connecting to Postgres database!!', error);
     } else {
-      console.log('Connected to MySQL database!');   
-      var sql = `CREATE TABLE IF NOT EXISTS login (id INT AUTO_INCREMENT primary key NOT NULL, username VARCHAR (255), password VARCHAR (255))`
+      console.log('Connected to Postgres database!!');   
+      
+      // created in signup.sql uncoment for localhost 
+      var sql = `CREATE TABLE IF NOT EXISTS login (id serial primary key NOT NULL, username VARCHAR (255), password VARCHAR (255))`
       db.query(sql, function (err, result) {
         if (err) throw err;
       });
-    }
+    } 
   });
 
 
 app.post('/signup', (req,res) => {
-    const sql = "INSERT INTO login (`username`, `password`) VALUES (?)"
-    const values = [
-        req.body.username,
-        req.body.password
-    ]
+    const insertQuery = {
+        text: "INSERT INTO login (username, password) VALUES ($1, $2);",
+        values: [
+            req.body.username,
+            req.body.password
+        ]
+    } 
 
-    db.query(sql,[values],(err,data) => {
+    db.query(insertQuery,(err,data) => {
         if(err) {
             return res.json('Error')
         }
@@ -42,22 +58,26 @@ app.post('/signup', (req,res) => {
 })
 
 app.post('/login', (req,res) => {
+    const loginQuery = {
+        text: "SELECT * FROM login WHERE username = $1 AND password = $2;",
+        values: [
+            req.body.username,
+            req.body.password
+        ]
+    } 
 
-    const sql = 'SELECT * FROM login WHERE `username`= ? AND `password`= ? '
-    
-    db.query(sql, [req.body.username, req.body.password], (err,data) => {
+    db.query(loginQuery, (err,data) => {
         if(err) {
             return res.json('Error')
         } 
-        if(data.length > 0 ) {
+        if(data.rowCount > 0 ) {
             return res.json('Success')
         } else {
             return res.json('Fail')
         }
-
     })
 })
 
-app.listen(8000, ()=>{
+app.listen(8005, ()=>{
     console.log('SREVER STARTED')
 } )

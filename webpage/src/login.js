@@ -13,7 +13,7 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8081/login', loginValues)
+        axios.post('http://localhost:8005/login', loginValues)
         .then(res => {
             if(res.data === "Success") {
                 navigate('/home')

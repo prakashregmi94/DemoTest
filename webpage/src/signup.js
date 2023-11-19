@@ -12,7 +12,7 @@ function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault() 
-        axios.post('http://localhost:8081/signup', loginValues)
+        axios.post('http://localhost:8005/signup', loginValues)
         .then(res => 
             navigate('/'))
         .catch(err => console.log(err))
