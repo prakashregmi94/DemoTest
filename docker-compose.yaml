@@ -25,7 +25,20 @@ services:
     depends_on:
       - database
 
-  #frontend
+  frontend:
+    build: 
+      context: ./webpage
+    image: frontend  
+    volumes:
+      - ./webpage/src:/app/src
+    ports:
+      - 3000:3000
+    container_name: frontend
+    depends_on:
+      - backend
+    stdin_open: true 
+    tty: true 
+
 
 volumes:
   data:
